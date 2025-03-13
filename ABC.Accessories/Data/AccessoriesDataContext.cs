@@ -11,8 +11,8 @@ public class AccessoriesDataContext(DbContextOptions options) : DbContext(option
             .IsUnique();
 
         modelBuilder.Entity<Accessory>()
-        .HasIndex(x => x.AccessoryGuid)
-        .IsUnique();
+            .HasIndex(x => x.AccessoryGuid)
+            .IsUnique();
 
         modelBuilder.Entity<Accessory>()
             .HasMany(e => e.Sellers)
@@ -26,5 +26,5 @@ public class AccessoriesDataContext(DbContextOptions options) : DbContext(option
     public DbSet<ItemImage> ItemImages => Set<ItemImage>();
     public DbSet<Seller> Sellers => Set<Seller>();
     public DbSet<Category> Category => Set<Category>();
-
+    public DbSet<DeviceModel> DeviceModel => Set<DeviceModel>();
 }

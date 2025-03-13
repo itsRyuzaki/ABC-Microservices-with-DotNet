@@ -11,6 +11,7 @@ public class Category : BaseImageDetail
 
     [Required]
     public required string Description { get; set; }
+    public required string Guid { get; set; }
 
     public List<AccessoryBase> AccessoriesBase { get; set; } = [];
 

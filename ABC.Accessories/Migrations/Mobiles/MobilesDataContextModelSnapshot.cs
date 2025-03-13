@@ -111,6 +111,10 @@ namespace ABC.Accessories.Migrations.Mobiles
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Guid")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -137,6 +141,10 @@ namespace ABC.Accessories.Migrations.Mobiles
                         .HasColumnType("text");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Guid")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -169,6 +177,10 @@ namespace ABC.Accessories.Migrations.Mobiles
                         .HasColumnType("text");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Guid")
                         .IsRequired()
                         .HasColumnType("text");
 

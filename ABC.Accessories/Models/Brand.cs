@@ -11,6 +11,8 @@ public class Brand {
     [Required]
     public required string OfficialSite {get; set;}
 
+    public required string Guid { get; set; }
+
     public List<AccessoryBase> AccessoriesBase { get; set; } = [];
 
 }

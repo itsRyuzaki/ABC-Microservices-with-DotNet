@@ -44,7 +44,7 @@ public partial class AccessoriesHelper(
             var deserializedJson = await JsonSerializer.DeserializeAsync<T>(stream, serializationOptions);
             return ApiResponseDto<T>.HandleSuccessResponse(deserializedJson);
         }
-        catch (JsonException error)
+        catch (Exception error)
         {
             _logger.LogError("Error deserializing the JSON:\n {error}", error);
             return ApiResponseDto<T>.HandleErrorResponse((int)ResponseCode.ERROR, ["Error deserializing JSON."]);

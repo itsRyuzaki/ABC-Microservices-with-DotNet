@@ -158,7 +158,8 @@ public class AccessoriesFacade(
 
         if (savedItemImages.Count != 0)
         {
-            var savedResponse = await _accessoriesService.AddImagesToAccessoryAsync(savedItemImages, accessory, type);
+            var savedResponse = await _accessoriesService
+                                            .AddImagesToAccessoryAsync(savedItemImages, accessory, type);
             if (savedResponse.Success)
             {
                 return ApiResponseDto<List<bool>>.HandleSuccessResponse(fileSavedResponse);
@@ -170,5 +171,43 @@ public class AccessoriesFacade(
                                                             (int)ResponseCode.ERROR,
                                                             ["Error while saving images"]
                                                         );
+    }
+
+    public async Task<ApiResponseDto<int>> AddCategoryAsync(AddCategoryDTO categoryDTO)
+    {
+
+        var category = _mapper.Map<Category>(categoryDTO);
+        var fileName = _accessoriesHelper.SanitizeBlobName(categoryDTO.File.FileName);
+
+        category.Guid = Guid.NewGuid().ToString();
+
+        var blobFilePath = $"{BlobPath.CategoryImages}/{category.Guid}/{fileName}";
+
+        category.Source = blobFilePath;
+
+        var dbResponse = await _accessoriesService.AddCategoryAsync(category, categoryDTO.Type);
+
+        if (dbResponse.Success)
+        {
+            var fileSaved = await _blobService.Upload(
+                                            categoryDTO.Type.ToLower(),
+                                            blobFilePath,
+                                            categoryDTO.File
+                                        );
+
+            if (!fileSaved)
+            {
+                await _accessoriesService.DeleteCategoryAsync(dbResponse.Data, categoryDTO.Type);
+                return ApiResponseDto<int>.HandleErrorResponse((int)ResponseCode.ERROR, ["Error while saving category images"]);
+            }
+        }
+
+        return dbResponse;
+
+    }
+
+    public async Task<ApiResponseDto<List<Category>?>> GetCategoriesAsync(string type)
+    {
+        return await _accessoriesService.GetCategoriesAsync(type);
     }
 }

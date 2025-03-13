@@ -2,6 +2,7 @@ using AutoMapper;
 using ABC.Accessories.DTO.Request;
 using ABC.Accessories.Models;
 using ABC.Accessories.Models.MongoDb;
+using ABC.Accessories.DTO;
 
 namespace ABC.Accessories.AutoMapper;
 
@@ -13,7 +14,8 @@ public class AccessoriesMapper : Profile
         CreateMap<AddAccessoryDTO, AccessoryExtras>();
         CreateMap<AddAccessoryBaseDTO, AccessoryBase>();
         CreateMap<AddAccessoryBaseDTO, AccessoryBaseExtras>();
-        CreateMap<ItemImageDTO, ItemImage>();
+        CreateMap<ImageDTO, ItemImage>();
         CreateMap<AddSellerDTO, Seller>();
+        CreateMap<AddCategoryDTO, Category>();
     }
 }

@@ -201,7 +201,11 @@ public class AccessoriesService : IAccessoriesService
         }
         catch (Exception error)
         {
-            _logger.LogError("Error while fetching Accessory details from Guid: {guid}. See error stack below: \n {error}", accessoryGuid, error.ToString());
+            _logger.LogError(
+                "Error while fetching Accessory details from Guid: {guid}. See error stack below: \n {error}",
+                accessoryGuid,
+                error.ToString()
+            );
             return null;
         }
     }
@@ -220,14 +224,184 @@ public class AccessoriesService : IAccessoriesService
         catch (Exception error)
         {
             _logger.LogError(
-                        "Error while saving images for accessory: {guid}. See error stack below: \n {error}",
-                        accessory.AccessoryGuid,
-                        error.ToString()
-                    );
+                "Error while saving images for accessory: {guid}. See error stack below: \n {error}",
+                accessory.AccessoryGuid,
+                error.ToString()
+            );
 
             return ApiResponseDto.HandleErrorResponse((int)ResponseCode.ERROR, ["Error while saving images for accessory."]);
         }
-
     }
+
+    public async Task<ApiResponseDto<int>> AddCategoryAsync(Category category, string type)
+    {
+        try
+        {
+            _contextMap[type].Category.Add(category);
+            int categoryId = await _contextMap[type].SaveChangesAsync();
+
+            _logger.LogInformation("Saved details for Category: {name}", category.Name);
+            return ApiResponseDto<int>.HandleSuccessResponse(categoryId);
+
+        }
+        catch (Exception error)
+        {
+            _logger.LogError(
+                        "Error while saving details for Category: {name}. See error stack below: \n {error}",
+                        category.Name,
+                        error.ToString()
+                    );
+
+            return ApiResponseDto<int>.HandleErrorResponse((int)ResponseCode.ERROR, ["Error while saving category details."]);
+        }
+    }
+
+
+    public async Task<ApiResponseDto<bool>> DeleteCategoryAsync(int categoryId, string type)
+    {
+        try
+        {
+            int deletedRows = await _contextMap[type].Category
+                                        .Where(category => category.Id == categoryId).ExecuteDeleteAsync();
+
+
+            _logger.LogInformation("Removed details for Category: {categoryId}", categoryId);
+
+            if (deletedRows > 0)
+            {
+                return ApiResponseDto<bool>.HandleSuccessResponse(true);
+            }
+            else
+            {
+                return ApiResponseDto<bool>.HandleErrorResponse(
+                                                (int)ResponseCode.NOT_FOUND,
+                                                ["No Record found for given category"]
+                                            );
+            }
+
+        }
+        catch (Exception error)
+        {
+            _logger.LogError(
+                        "Error while deleting details for Category: {categoryId}. See error stack below: \n {error}",
+                        categoryId,
+                        error.ToString()
+                    );
+
+            return ApiResponseDto<bool>
+                    .HandleErrorResponse((int)ResponseCode.ERROR, ["Error while deleting category details."]);
+        }
+    }
+
+    public async Task<ApiResponseDto<List<Category>?>> GetCategoriesAsync(string type)
+    {
+        try
+        {
+            _logger.LogInformation("Fetching Categories for type: {type}", type);
+
+            var list =  await _contextMap[type].Category.ToListAsync();
+
+            return ApiResponseDto<List<Category>?>.HandleSuccessResponse(list);
+
+        }
+        catch (Exception error)
+        {
+            _logger.LogError(
+                "Error while fetching Categories for type: {type}. See error stack below: \n {error}",
+                type,
+                error.ToString()
+            );
+           return ApiResponseDto<List<Category>?>.HandleErrorResponse((int) ResponseCode.ERROR, ["Error while fetching Categories"]);
+        }
+    }
+
+
+    public async Task<ApiResponseDto<int>> AddBrandAsync(Brand brand, string type)
+    {
+        try
+        {
+            _contextMap[type].Brands.Add(brand);
+            int brandId = await _contextMap[type].SaveChangesAsync();
+
+            _logger.LogInformation("Saved details for Brand: {name}", brand.Name);
+            return ApiResponseDto<int>.HandleSuccessResponse(brandId);
+
+        }
+        catch (Exception error)
+        {
+            _logger.LogError(
+                        "Error while saving details for Brand: {name}. See error stack below: \n {error}",
+                        brand.Name,
+                        error.ToString()
+                    );
+
+            return ApiResponseDto<int>.HandleErrorResponse((int)ResponseCode.ERROR, ["Error while saving category details."]);
+        }
+    }
+
+    public async Task<List<Brand>?> GetBrandsAsync(string type)
+    {
+        try
+        {
+            _logger.LogInformation("Fetching Brands for type: {type}", type);
+
+            return await _contextMap[type].Brands.ToListAsync();
+
+        }
+        catch (Exception error)
+        {
+            _logger.LogError(
+                "Error while fetching Brands for type: {type}. See error stack below: \n {error}",
+                type,
+                error.ToString()
+            );
+            return null;
+        }
+    }
+
+    public async Task<ApiResponseDto<int>> AddDeviceModelAsync(DeviceModel deviceModel, string type)
+    {
+        try
+        {
+            _contextMap[type].DeviceModel.Add(deviceModel);
+            int deviceModelId = await _contextMap[type].SaveChangesAsync();
+
+            _logger.LogInformation("Saved details for DeviceModel: {name}", deviceModel.Name);
+            return ApiResponseDto<int>.HandleSuccessResponse(deviceModelId);
+
+        }
+        catch (Exception error)
+        {
+            _logger.LogError(
+                        "Error while saving details for DeviceModel: {name}. See error stack below: \n {error}",
+                        deviceModel.Name,
+                        error.ToString()
+                    );
+
+            return ApiResponseDto<int>.HandleErrorResponse((int)ResponseCode.ERROR, ["Error while saving Device Model details."]);
+        }
+    }
+
+    public async Task<List<DeviceModel>?> GetDeviceModelsAsync(string type)
+    {
+        try
+        {
+            _logger.LogInformation("Fetching DeviceModels for type: {type}", type);
+
+            return await _contextMap[type].DeviceModel.ToListAsync();
+
+        }
+        catch (Exception error)
+        {
+            _logger.LogError(
+                "Error while fetching DeviceModels for type: {type}. See error stack below: \n {error}",
+                type,
+                error.ToString()
+            );
+            return null;
+        }
+    }
+
+
 
 }
