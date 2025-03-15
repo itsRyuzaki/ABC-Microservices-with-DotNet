@@ -10,7 +10,7 @@ public interface IAccessoriesFacade
     public Task<ApiResponseDto<string>> AddAccessoryDetailAsync(AddAccessoryDTO requestPayload);
 
     public Task<ApiResponseDto<string>> AddAccessoryBaseDetailAsync(AddAccessoryBaseDTO payload);
-    
+
     public Task<ApiResponseDto<string>> AddSellerDetailsAsync(AddSellerDTO payload);
 
     public Task<ApiResponseDto<List<bool>>> AddAccessoryImagesAsync(List<IFormFile> images, IFormFile requestPayload);
@@ -18,6 +18,12 @@ public interface IAccessoriesFacade
     public Task<ApiResponseDto<int>> AddCategoryAsync(AddCategoryDTO categoryDTO);
     public Task<ApiResponseDto<List<Category>?>> GetCategoriesAsync(string type);
 
+    public Task<ApiResponseDto<int>> AddBrandAsync(AddBrandDTO brandDTO);
 
+    public Task<ApiResponseDto<List<Brand>?>> GetBrandsAsync(string type);
+
+    public Task<ApiResponseDto<int>> AddDeviceModelAsync(AddDeviceModelDTO deviceModelDTO);
+
+    public Task<ApiResponseDto<List<DeviceModel>?>> GetDeviceModelsAsync(string type);
 
 }

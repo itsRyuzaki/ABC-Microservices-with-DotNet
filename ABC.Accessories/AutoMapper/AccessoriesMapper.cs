@@ -17,5 +17,8 @@ public class AccessoriesMapper : Profile
         CreateMap<ImageDTO, ItemImage>();
         CreateMap<AddSellerDTO, Seller>();
         CreateMap<AddCategoryDTO, Category>();
+        CreateMap<AddBrandDTO, Brand>();
+        CreateMap<AddDeviceModelDTO, DeviceModel>();
+
     }
 }

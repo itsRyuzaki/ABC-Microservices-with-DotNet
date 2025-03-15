@@ -197,7 +197,7 @@ public class AccessoriesFacade(
 
             if (!fileSaved)
             {
-                await _accessoriesService.DeleteCategoryAsync(dbResponse.Data, categoryDTO.Type);
+                await _accessoriesService.DeleteCategoryByIdAsync(dbResponse.Data, categoryDTO.Type);
                 return ApiResponseDto<int>.HandleErrorResponse((int)ResponseCode.ERROR, ["Error while saving category images"]);
             }
         }
@@ -209,5 +209,81 @@ public class AccessoriesFacade(
     public async Task<ApiResponseDto<List<Category>?>> GetCategoriesAsync(string type)
     {
         return await _accessoriesService.GetCategoriesAsync(type);
+    }
+
+    public async Task<ApiResponseDto<int>> AddBrandAsync(AddBrandDTO brandDTO)
+    {
+
+        var brand = _mapper.Map<Brand>(brandDTO);
+        var fileName = _accessoriesHelper.SanitizeBlobName(brandDTO.File.FileName);
+
+        brand.Guid = Guid.NewGuid().ToString();
+
+        var blobFilePath = $"{BlobPath.CategoryImages}/{brand.Guid}/{fileName}";
+
+        brand.Source = blobFilePath;
+
+        var dbResponse = await _accessoriesService.AddBrandAsync(brand, brandDTO.Type);
+
+        if (dbResponse.Success)
+        {
+            var fileSaved = await _blobService.Upload(
+                                            brandDTO.Type.ToLower(),
+                                            blobFilePath,
+                                            brandDTO.File
+                                        );
+
+            if (!fileSaved)
+            {
+                await _accessoriesService.DeleteCategoryByIdAsync(dbResponse.Data, brandDTO.Type);
+                return ApiResponseDto<int>.HandleErrorResponse((int)ResponseCode.ERROR, ["Error while saving brand images"]);
+            }
+        }
+
+        return dbResponse;
+
+    }
+
+    public async Task<ApiResponseDto<List<Brand>?>> GetBrandsAsync(string type)
+    {
+        return await _accessoriesService.GetBrandsAsync(type);
+    }
+
+    public async Task<ApiResponseDto<int>> AddDeviceModelAsync(AddDeviceModelDTO deviceModelDTO)
+    {
+
+        var deviceModel = _mapper.Map<DeviceModel>(deviceModelDTO);
+        var fileName = _accessoriesHelper.SanitizeBlobName(deviceModelDTO.File.FileName);
+
+        deviceModel.Guid = Guid.NewGuid().ToString();
+
+        var blobFilePath = $"{BlobPath.CategoryImages}/{deviceModel.Guid}/{fileName}";
+
+        deviceModel.Source = blobFilePath;
+
+        var dbResponse = await _accessoriesService.AddDeviceModelAsync(deviceModel, deviceModelDTO.Type);
+
+        if (dbResponse.Success)
+        {
+            var fileSaved = await _blobService.Upload(
+                                            deviceModelDTO.Type.ToLower(),
+                                            blobFilePath,
+                                            deviceModelDTO.File
+                                        );
+
+            if (!fileSaved)
+            {
+                await _accessoriesService.DeleteDeviceModelByIdAsync(dbResponse.Data, deviceModelDTO.Type);
+                return ApiResponseDto<int>.HandleErrorResponse((int)ResponseCode.ERROR, ["Error while saving device model images"]);
+            }
+        }
+
+        return dbResponse;
+
+    }
+
+    public async Task<ApiResponseDto<List<DeviceModel>?>> GetDeviceModelsAsync(string type)
+    {
+        return await _accessoriesService.GetDeviceModelsAsync(type);
     }
 }

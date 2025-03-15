@@ -16,7 +16,7 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
         return "Accessories microservice up and running!!";
     }
 
-     private ObjectResult GetStatusCode<T>(ApiResponseDto<T> response, ResponseCode successCode)
+    private ObjectResult GetStatusCode<T>(ApiResponseDto<T> response, ResponseCode successCode)
     {
         return StatusCode(
                    response.Success ? (int)successCode : (response.ErrorDetails?.Code ?? (int)ResponseCode.ERROR),
@@ -56,14 +56,14 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
 
     [HttpPost("category")]
 
-    public async Task<IActionResult> AddCategory([FromForm]AddCategoryDTO payload)
+    public async Task<IActionResult> AddCategory([FromForm] AddCategoryDTO payload)
     {
         var response = await _accessoriesFacade.AddCategoryAsync(payload);
         return GetStatusCode(response, ResponseCode.SUCCESS_CREATED);
 
     }
 
-    [HttpGet("category")]
+    [HttpGet("category/all")]
 
     public async Task<IActionResult> GetCategories(string type)
     {
@@ -72,5 +72,40 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
 
     }
 
-   
+    [HttpPost("brand")]
+
+    public async Task<IActionResult> AddBrand([FromForm] AddBrandDTO payload)
+    {
+        var response = await _accessoriesFacade.AddBrandAsync(payload);
+        return GetStatusCode(response, ResponseCode.SUCCESS_CREATED);
+
+    }
+
+    [HttpGet("brand/all")]
+
+    public async Task<IActionResult> GetBrands(string type)
+    {
+        var response = await _accessoriesFacade.GetBrandsAsync(type);
+        return GetStatusCode(response, ResponseCode.SUCCESS);
+
+    }
+
+    [HttpPost("device-model")]
+
+    public async Task<IActionResult> AddDeviceModel([FromForm] AddDeviceModelDTO payload)
+    {
+        var response = await _accessoriesFacade.AddDeviceModelAsync(payload);
+        return GetStatusCode(response, ResponseCode.SUCCESS_CREATED);
+
+    }
+
+    [HttpGet("device-model/all")]
+
+    public async Task<IActionResult> GetDeviceModels(string type)
+    {
+        var response = await _accessoriesFacade.GetDeviceModelsAsync(type);
+        return GetStatusCode(response, ResponseCode.SUCCESS);
+    }
+
+
 }

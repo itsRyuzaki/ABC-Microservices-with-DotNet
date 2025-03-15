@@ -26,13 +26,17 @@ public interface IAccessoriesService
 
     public Task<ApiResponseDto<List<Category>?>> GetCategoriesAsync(string type);
 
-    public Task<ApiResponseDto<bool>> DeleteCategoryAsync(int categoryId, string type);
-
+    public Task<ApiResponseDto<bool>> DeleteCategoryByIdAsync(int categoryId, string type);
 
     public Task<ApiResponseDto<int>> AddBrandAsync(Brand brand, string type);
-    public Task<List<Brand>?> GetBrandsAsync(string type);
+
+    public Task<ApiResponseDto<bool>> DeleteBrandByIdAsync(int categoryId, string type);
+
+    public Task<ApiResponseDto<List<Brand>?>> GetBrandsAsync(string type);
 
     public Task<ApiResponseDto<int>> AddDeviceModelAsync(DeviceModel deviceModel, string type);
 
-    public Task<List<DeviceModel>?> GetDeviceModelsAsync(string type);
+    public Task<ApiResponseDto<bool>> DeleteDeviceModelByIdAsync(int categoryId, string type);
+
+    public Task<ApiResponseDto<List<DeviceModel>?>> GetDeviceModelsAsync(string type);
 }

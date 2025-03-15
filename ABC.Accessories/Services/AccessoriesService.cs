@@ -257,7 +257,7 @@ public class AccessoriesService : IAccessoriesService
     }
 
 
-    public async Task<ApiResponseDto<bool>> DeleteCategoryAsync(int categoryId, string type)
+    public async Task<ApiResponseDto<bool>> DeleteCategoryByIdAsync(int categoryId, string type)
     {
         try
         {
@@ -299,7 +299,7 @@ public class AccessoriesService : IAccessoriesService
         {
             _logger.LogInformation("Fetching Categories for type: {type}", type);
 
-            var list =  await _contextMap[type].Category.ToListAsync();
+            var list = await _contextMap[type].Category.ToListAsync();
 
             return ApiResponseDto<List<Category>?>.HandleSuccessResponse(list);
 
@@ -311,7 +311,7 @@ public class AccessoriesService : IAccessoriesService
                 type,
                 error.ToString()
             );
-           return ApiResponseDto<List<Category>?>.HandleErrorResponse((int) ResponseCode.ERROR, ["Error while fetching Categories"]);
+            return ApiResponseDto<List<Category>?>.HandleErrorResponse((int)ResponseCode.ERROR, ["Error while fetching Categories"]);
         }
     }
 
@@ -339,13 +339,52 @@ public class AccessoriesService : IAccessoriesService
         }
     }
 
-    public async Task<List<Brand>?> GetBrandsAsync(string type)
+    public async Task<ApiResponseDto<bool>> DeleteBrandByIdAsync(int brandId, string type)
+    {
+        try
+        {
+            int deletedRows = await _contextMap[type].Brands
+                                        .Where(brand => brand.Id == brandId).ExecuteDeleteAsync();
+
+
+            _logger.LogInformation("Removed details for Brand: {brandId}", brandId);
+
+            if (deletedRows > 0)
+            {
+                return ApiResponseDto<bool>.HandleSuccessResponse(true);
+            }
+            else
+            {
+                return ApiResponseDto<bool>.HandleErrorResponse(
+                                                (int)ResponseCode.NOT_FOUND,
+                                                ["No Record found for given brand"]
+                                            );
+            }
+
+        }
+        catch (Exception error)
+        {
+            _logger.LogError(
+                        "Error while deleting details for Brand: {brandId}. See error stack below: \n {error}",
+                        brandId,
+                        error.ToString()
+                    );
+
+            return ApiResponseDto<bool>
+                    .HandleErrorResponse((int)ResponseCode.ERROR, ["Error while deleting brand details."]);
+        }
+    }
+
+
+    public async Task<ApiResponseDto<List<Brand>?>> GetBrandsAsync(string type)
     {
         try
         {
             _logger.LogInformation("Fetching Brands for type: {type}", type);
 
-            return await _contextMap[type].Brands.ToListAsync();
+            var list = await _contextMap[type].Brands.ToListAsync();
+
+            return ApiResponseDto<List<Brand>?>.HandleSuccessResponse(list);
 
         }
         catch (Exception error)
@@ -355,7 +394,7 @@ public class AccessoriesService : IAccessoriesService
                 type,
                 error.ToString()
             );
-            return null;
+            return ApiResponseDto<List<Brand>?>.HandleErrorResponse((int)ResponseCode.ERROR, ["Error while fetching Brands for given type."]);
         }
     }
 
@@ -382,13 +421,51 @@ public class AccessoriesService : IAccessoriesService
         }
     }
 
-    public async Task<List<DeviceModel>?> GetDeviceModelsAsync(string type)
+    public async Task<ApiResponseDto<bool>> DeleteDeviceModelByIdAsync(int deviceModelId, string type)
+    {
+        try
+        {
+            int deletedRows = await _contextMap[type].DeviceModel
+                                        .Where(deviceModel => deviceModel.Id == deviceModelId).ExecuteDeleteAsync();
+
+
+            _logger.LogInformation("Removed details for Device Model: {deviceModelId}", deviceModelId);
+
+            if (deletedRows > 0)
+            {
+                return ApiResponseDto<bool>.HandleSuccessResponse(true);
+            }
+            else
+            {
+                return ApiResponseDto<bool>.HandleErrorResponse(
+                                                (int)ResponseCode.NOT_FOUND,
+                                                ["No Record found for given device model"]
+                                            );
+            }
+
+        }
+        catch (Exception error)
+        {
+            _logger.LogError(
+                        "Error while deleting details for Device Model: {deviceModelId}. See error stack below: \n {error}",
+                        deviceModelId,
+                        error.ToString()
+                    );
+
+            return ApiResponseDto<bool>
+                    .HandleErrorResponse((int)ResponseCode.ERROR, ["Error while deleting device model details."]);
+        }
+    }
+
+
+    public async Task<ApiResponseDto<List<DeviceModel>?>> GetDeviceModelsAsync(string type)
     {
         try
         {
             _logger.LogInformation("Fetching DeviceModels for type: {type}", type);
 
-            return await _contextMap[type].DeviceModel.ToListAsync();
+            var list = await _contextMap[type].DeviceModel.ToListAsync();
+            return ApiResponseDto<List<DeviceModel>?>.HandleSuccessResponse(list);
 
         }
         catch (Exception error)
@@ -398,7 +475,10 @@ public class AccessoriesService : IAccessoriesService
                 type,
                 error.ToString()
             );
-            return null;
+            return ApiResponseDto<List<DeviceModel>?>.HandleErrorResponse(
+                                                            (int)ResponseCode.ERROR,
+                                                            ["Error while fetching device models"]
+                                                        );
         }
     }
 
