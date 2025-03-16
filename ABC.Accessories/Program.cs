@@ -13,6 +13,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+// Add Cors
+string origin = builder.Configuration.GetSection("AppSettings")
+                                    .GetValue<string>("AppOrigin") ?? "";
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy
+                .WithOrigins(origin)
+                .AllowCredentials()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 // for swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

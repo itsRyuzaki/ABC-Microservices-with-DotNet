@@ -54,7 +54,7 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
         return GetStatusCode(response, ResponseCode.SUCCESS_CREATED);
     }
 
-    [HttpPost("category")]
+    [HttpPost("categories")]
 
     public async Task<IActionResult> AddCategory([FromForm] AddCategoryDTO payload)
     {
@@ -63,7 +63,7 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
 
     }
 
-    [HttpGet("category/all")]
+    [HttpGet("categories")]
 
     public async Task<IActionResult> GetCategories(string type)
     {
@@ -72,7 +72,7 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
 
     }
 
-    [HttpPost("brand")]
+    [HttpPost("brands")]
 
     public async Task<IActionResult> AddBrand([FromForm] AddBrandDTO payload)
     {
@@ -81,7 +81,7 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
 
     }
 
-    [HttpGet("brand/all")]
+    [HttpGet("brands")]
 
     public async Task<IActionResult> GetBrands(string type)
     {
@@ -90,7 +90,7 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
 
     }
 
-    [HttpPost("device-model")]
+    [HttpPost("device-models")]
 
     public async Task<IActionResult> AddDeviceModel([FromForm] AddDeviceModelDTO payload)
     {
@@ -99,7 +99,7 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
 
     }
 
-    [HttpGet("device-model/all")]
+    [HttpGet("device-models")]
 
     public async Task<IActionResult> GetDeviceModels(string type)
     {
