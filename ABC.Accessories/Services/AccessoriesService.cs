@@ -146,7 +146,7 @@ public class AccessoriesService : IAccessoriesService
 
     }
 
-    public async Task<ApiResponseDto<string>> AddSellerAsync(Seller seller, string type)
+    public async Task<ApiResponseDto<int>> AddSellerAsync(Seller seller, string type)
     {
 
         try
@@ -155,7 +155,7 @@ public class AccessoriesService : IAccessoriesService
             await _contextMap[type].SaveChangesAsync();
 
             _logger.LogInformation("Saved details for seller: {name}", seller.Name);
-            return ApiResponseDto.HandleSuccessResponse("Seller Added");
+            return ApiResponseDto<int>.HandleSuccessResponse(seller.Id);
 
         }
         catch (Exception error)
@@ -166,13 +166,38 @@ public class AccessoriesService : IAccessoriesService
                         error.ToString()
                     );
 
-            return ApiResponseDto.HandleErrorResponse((int)ResponseCode.ERROR, ["Error while saving seller details."]);
+            return ApiResponseDto<int>.HandleErrorResponse(
+                            (int)ResponseCode.ERROR,
+                            ["Error while saving seller details."]
+                        );
         }
 
 
     }
 
-    public async Task<List<Seller>> GetSellersAsync(int[] sellerIds, string type)
+    public async Task<ApiResponseDto<List<Seller>?>> GetSellersAsync(string type)
+    {
+        try
+        {
+            _logger.LogInformation("Fetching sellers for type: {type}", type);
+
+            var list = await _contextMap[type].Sellers.ToListAsync();
+
+            return ApiResponseDto<List<Seller>?>.HandleSuccessResponse(list);
+
+        }
+        catch (Exception error)
+        {
+            _logger.LogError(
+                "Error while fetching Sellers for type: {type}. See error stack below: \n {error}",
+                type,
+                error.ToString()
+            );
+            return ApiResponseDto<List<Seller>?>.HandleErrorResponse((int)ResponseCode.ERROR, ["Error while fetching Sellers"]);
+        }
+    }
+
+    public async Task<List<Seller>> GetSellersFromIdsAsync(int[] sellerIds, string type)
     {
         try
         {
@@ -238,10 +263,10 @@ public class AccessoriesService : IAccessoriesService
         try
         {
             _contextMap[type].Category.Add(category);
-            int categoryId = await _contextMap[type].SaveChangesAsync();
+            await _contextMap[type].SaveChangesAsync();
 
             _logger.LogInformation("Saved details for Category: {name}", category.Name);
-            return ApiResponseDto<int>.HandleSuccessResponse(categoryId);
+            return ApiResponseDto<int>.HandleSuccessResponse(category.Id);
 
         }
         catch (Exception error)
@@ -321,10 +346,10 @@ public class AccessoriesService : IAccessoriesService
         try
         {
             _contextMap[type].Brands.Add(brand);
-            int brandId = await _contextMap[type].SaveChangesAsync();
+            await _contextMap[type].SaveChangesAsync();
 
             _logger.LogInformation("Saved details for Brand: {name}", brand.Name);
-            return ApiResponseDto<int>.HandleSuccessResponse(brandId);
+            return ApiResponseDto<int>.HandleSuccessResponse(brand.Id);
 
         }
         catch (Exception error)
@@ -403,10 +428,10 @@ public class AccessoriesService : IAccessoriesService
         try
         {
             _contextMap[type].DeviceModel.Add(deviceModel);
-            int deviceModelId = await _contextMap[type].SaveChangesAsync();
+            await _contextMap[type].SaveChangesAsync();
 
             _logger.LogInformation("Saved details for DeviceModel: {name}", deviceModel.Name);
-            return ApiResponseDto<int>.HandleSuccessResponse(deviceModelId);
+            return ApiResponseDto<int>.HandleSuccessResponse(deviceModel.Id);
 
         }
         catch (Exception error)

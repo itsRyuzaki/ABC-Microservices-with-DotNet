@@ -11,7 +11,9 @@ public interface IAccessoriesFacade
 
     public Task<ApiResponseDto<string>> AddAccessoryBaseDetailAsync(AddAccessoryBaseDTO payload);
 
-    public Task<ApiResponseDto<string>> AddSellerDetailsAsync(AddSellerDTO payload);
+    public Task<ApiResponseDto<int>> AddSellerDetailsAsync(AddSellerDTO payload);
+
+    public Task<ApiResponseDto<List<Seller>?>> GetSellersAsync(string type);
 
     public Task<ApiResponseDto<List<bool>>> AddAccessoryImagesAsync(List<IFormFile> images, IFormFile requestPayload);
 

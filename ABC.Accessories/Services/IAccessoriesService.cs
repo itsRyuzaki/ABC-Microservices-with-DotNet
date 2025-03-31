@@ -10,13 +10,14 @@ public interface IAccessoriesService
 
     public Task<ApiResponseDto<string>> AddAccessoryExtrasAsync(AccessoryExtras accessoryExtras, string type);
 
-    public Task<ApiResponseDto<string>> AddSellerAsync(Seller seller, string type);
+    public Task<ApiResponseDto<int>> AddSellerAsync(Seller seller, string type);
+    public Task<ApiResponseDto<List<Seller>?>> GetSellersAsync(string type);
 
     public Task<ApiResponseDto<string>> AddAccessoryBaseAsync(AccessoryBase accessoryBase, string type);
 
     public Task<ApiResponseDto<string>> AddAccessoryBaseExtrasAsync(AccessoryBaseExtras baseExtras, string type);
 
-    public Task<List<Seller>> GetSellersAsync(int[] sellerIds, string type);
+    public Task<List<Seller>> GetSellersFromIdsAsync(int[] sellerIds, string type);
 
     public Task<Accessory?> GetAccessoryFromGuidAsync(string accessoryGuid, string type);
 

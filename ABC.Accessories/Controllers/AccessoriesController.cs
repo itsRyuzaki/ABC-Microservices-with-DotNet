@@ -47,11 +47,19 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
         return GetStatusCode(response, ResponseCode.SUCCESS_CREATED);
     }
 
-    [HttpPost("seller")]
+    [HttpPost("sellers")]
     public async Task<IActionResult> AddSeller(AddSellerDTO payload)
     {
         var response = await _accessoriesFacade.AddSellerDetailsAsync(payload);
         return GetStatusCode(response, ResponseCode.SUCCESS_CREATED);
+    }
+
+    [HttpGet("sellers")]
+
+    public async Task<IActionResult> GetSellers(string type)
+    {
+        var response = await _accessoriesFacade.GetSellersAsync(type);
+        return GetStatusCode(response, ResponseCode.SUCCESS);
     }
 
     [HttpPost("categories")]

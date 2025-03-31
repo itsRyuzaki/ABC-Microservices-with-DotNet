@@ -27,7 +27,7 @@ public class AccessoriesFacade(
 
         // get seller details from seller ids
         var sellers = await _accessoriesService
-                                    .GetSellersAsync(payload.SellerIds, payload.Type);
+                                    .GetSellersFromIdsAsync(payload.SellerIds, payload.Type);
 
 
         if (sellers != null && sellers.Count != 0)
@@ -82,9 +82,14 @@ public class AccessoriesFacade(
         return await _accessoriesService.AddAccessoryBaseExtrasAsync(extraDetails, payload.Type);
     }
 
-    public async Task<ApiResponseDto<string>> AddSellerDetailsAsync(AddSellerDTO payload)
+    public async Task<ApiResponseDto<int>> AddSellerDetailsAsync(AddSellerDTO payload)
     {
         return await _accessoriesService.AddSellerAsync(_mapper.Map<Seller>(payload), payload.Type);
+    }
+
+    public async Task<ApiResponseDto<List<Seller>?>> GetSellersAsync(string type)
+    {
+        return await _accessoriesService.GetSellersAsync(type);
     }
 
     public async Task<ApiResponseDto<List<bool>>> AddAccessoryImagesAsync(List<IFormFile> images, IFormFile requestPayload)
