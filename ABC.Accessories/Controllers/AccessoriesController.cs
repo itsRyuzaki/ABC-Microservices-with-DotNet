@@ -31,7 +31,7 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
         return GetStatusCode(response, ResponseCode.SUCCESS_CREATED);
     }
 
-    [HttpPost("accessory")]
+    [HttpPost("")]
     public async Task<IActionResult> AddAccessory(AddAccessoryDTO payload)
     {
         var response = await _accessoriesFacade.AddAccessoryDetailAsync(payload);
@@ -40,7 +40,7 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
 
     }
 
-    [HttpPost("accessory/images")]
+    [HttpPost("images")]
     public async Task<IActionResult> AddAccessoryImages(List<IFormFile> images, IFormFile requestPayload)
     {
         var response = await _accessoriesFacade.AddAccessoryImagesAsync(images, requestPayload);

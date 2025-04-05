@@ -80,7 +80,7 @@ public class AccessoriesService : IAccessoriesService
             await _accExtrasCollectionMap[type].InsertOneAsync(accessoryExtras);
 
             _logger.LogInformation("Saved extra details for Accessory: {name}", accessoryExtras.AccessoryGuid);
-            return ApiResponseDto.HandleSuccessResponse("Accessory Extra Added");
+            return ApiResponseDto.HandleSuccessResponse(accessoryExtras.AccessoryGuid);
 
         }
         catch (Exception error)
@@ -129,7 +129,7 @@ public class AccessoriesService : IAccessoriesService
             await _baseExtrasCollectionMap[type].InsertOneAsync(baseExtras);
 
             _logger.LogInformation("Saved extra base details for Accessory: {name}", baseExtras.AccessoryBaseId);
-            return ApiResponseDto.HandleSuccessResponse("Extra Accessory Base Added");
+            return ApiResponseDto.HandleSuccessResponse(baseExtras.AccessoryBaseId);
 
         }
         catch (Exception error)
