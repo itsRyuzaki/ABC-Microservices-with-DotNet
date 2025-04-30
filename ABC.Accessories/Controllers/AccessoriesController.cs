@@ -38,6 +38,15 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
 
         return GetStatusCode(response, ResponseCode.SUCCESS_CREATED);
 
+    } 
+
+     [HttpPost("filter")]
+    public async Task<IActionResult> GetFilteredAccessoriesAsync(FilterAccessoriesDTO payload)
+    {
+        var response = await _accessoriesFacade.FilterAccessoriesAsync(payload);
+
+        return GetStatusCode(response, ResponseCode.SUCCESS);
+
     }
 
     [HttpPost("images")]

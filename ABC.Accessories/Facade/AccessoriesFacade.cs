@@ -291,4 +291,9 @@ public class AccessoriesFacade(
     {
         return await _accessoriesService.GetDeviceModelsAsync(type);
     }
+
+    public Task<ApiResponseDto<List<CombinedAccessoryDetail>>> FilterAccessoriesAsync(FilterAccessoriesDTO requestPayload)
+    {
+        return _accessoriesService.FilterAccessoriesAsync(requestPayload);
+    }
 }

@@ -1,3 +1,4 @@
+using ABC.Accessories.DTO.Request;
 using ABC.Accessories.DTO.Response;
 using ABC.Accessories.Models;
 using ABC.Accessories.Models.MongoDb;
@@ -40,4 +41,6 @@ public interface IAccessoriesService
     public Task<ApiResponseDto<bool>> DeleteDeviceModelByIdAsync(int categoryId, string type);
 
     public Task<ApiResponseDto<List<DeviceModel>?>> GetDeviceModelsAsync(string type);
+    public Task<ApiResponseDto<List<CombinedAccessoryDetail>>> FilterAccessoriesAsync(FilterAccessoriesDTO requestPayload);
+
 }

@@ -6,6 +6,7 @@ namespace ABC.Accessories.Facade;
 
 public interface IAccessoriesFacade
 {
+    public Task<ApiResponseDto<List<CombinedAccessoryDetail>>> FilterAccessoriesAsync(FilterAccessoriesDTO requestPayload);
 
     public Task<ApiResponseDto<string>> AddAccessoryDetailAsync(AddAccessoryDTO requestPayload);
 

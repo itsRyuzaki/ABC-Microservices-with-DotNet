@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using ABC.Accessories.Services.MongoDb;
 using ABC.Accessories.Models.MongoDb;
 using MongoDB.Driver;
+using ABC.Accessories.DTO.Request;
 
 namespace ABC.Accessories.Services;
 public class AccessoriesService : IAccessoriesService
@@ -507,6 +508,28 @@ public class AccessoriesService : IAccessoriesService
         }
     }
 
+    public async Task<ApiResponseDto<List<CombinedAccessoryDetail>>> FilterAccessoriesAsync(FilterAccessoriesDTO requestPayload)
+    {
+        var list = await _contextMap[requestPayload.Type].Accessories
+                            .Where(accessory =>
+                                    requestPayload.SearchTerm.Any(
+                                        value =>
+                                            accessory.AccessoryBase.Name.Contains(value)
+                                            || accessory.Description.Contains(value)
+                                    )
+                                    && requestPayload.BrandId.Any(id => id == accessory.AccessoryBase.BrandId)
+                                    && requestPayload.CategoryId.Any(id => id == accessory.AccessoryBase.CategoryId)
+                                    && requestPayload.DeviceModelId.Any(id => id == accessory.AccessoryBase.DeviceModelId)
+                                ).Select(accessory => new CombinedAccessoryDetail()
+                                {
+                                    AccessoryGuid = accessory.AccessoryGuid,
+                                    Name = accessory.AccessoryBase.Name,
+                                    Description = accessory.Description,
+                                    AbcPrice = accessory.AbcPrice,
 
+                                }).ToListAsync();
+
+        return ApiResponseDto<List<CombinedAccessoryDetail>>.HandleSuccessResponse(list);
+    }
 
 }
