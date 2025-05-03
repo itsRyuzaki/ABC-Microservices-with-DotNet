@@ -2,9 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ABC.Accessories.DTO.Request;
 
-public class AddAccessoryImagesDTO
+public class AddAccessoryImagesDTO : BasePayloadDTO
 {
-    public required string Type { get; set; }
     public required string AccessoryGuid { get; set; }
 
     [Required]

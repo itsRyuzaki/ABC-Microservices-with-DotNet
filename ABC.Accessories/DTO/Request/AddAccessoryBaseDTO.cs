@@ -2,10 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ABC.Accessories.DTO.Request;
 
-public class AddAccessoryBaseDTO
+public class AddAccessoryBaseDTO : BasePayloadDTO
 {
-    [Required]
-    public required string Type { get; set; }
 
     [Required]
     public required string Name { get; set; }
@@ -19,6 +17,6 @@ public class AddAccessoryBaseDTO
     [Required]
     public int BrandId { get; set; }
 
-    public KeyValuePair<string, string[]>[] MasterData {get; set;} = [];
+    public KeyValuePair<string, string[]>[] MasterAttributes { get; set; } = [];
 
 }

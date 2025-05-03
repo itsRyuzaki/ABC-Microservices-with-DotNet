@@ -2,13 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ABC.Accessories.DTO.Request;
 
-public class AddAccessoryDTO
+public class AddAccessoryDTO : BasePayloadDTO
 {
     [Required]
-    public required string Type { get; set; }
-
-    [Required]
-    public required string AccessoryBaseId {get; set;}
+    public required string AccessoryBaseId { get; set; }
 
     [Required]
     [MinLength(1)]
@@ -31,6 +28,6 @@ public class AddAccessoryDTO
     [Required]
     public int AvailableCount { get; set; }
 
-    public IDictionary<string, string> ItemAttributes {get; set;} = new Dictionary<string, string>();
+    public IDictionary<string, string> ItemAttributes { get; set; } = new Dictionary<string, string>();
 
 }

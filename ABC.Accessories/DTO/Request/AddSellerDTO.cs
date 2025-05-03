@@ -2,11 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ABC.Accessories.DTO.Request;
 
-public class AddSellerDTO
+public class AddSellerDTO : BasePayloadDTO
 {
-
-    [Required]
-    public required string Type { get; set; }
 
     [Required]
     public required string Name { get; set; }

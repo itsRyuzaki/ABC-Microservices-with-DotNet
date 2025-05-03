@@ -10,5 +10,5 @@ public class AccessoryBaseExtras {
 
     public required string AccessoryBaseId {get; set;}
 
-    public KeyValuePair<string, string[]>[] MasterData {get; set;} = [];
+    public KeyValuePair<string, string[]>[] MasterAttributes {get; set;} = [];
 }
