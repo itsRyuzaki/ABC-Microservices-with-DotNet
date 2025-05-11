@@ -82,6 +82,12 @@ public class AccessoriesFacade(
         return await _accessoriesService.AddAccessoryBaseExtrasAsync(extraDetails, payload.Type);
     }
 
+    public async Task<ApiResponseDto<CombinedAccessoryDetail>> GetAccessoryDetailsByIdAsync(string accessoryId,
+                                                                                       BasePayloadDTO payload)
+    {
+        return await _accessoriesService.GetAccessoryDetailsByIdAsync(accessoryId, payload.Type);
+    }
+
     public async Task<ApiResponseDto<int>> AddSellerDetailsAsync(AddSellerDTO payload)
     {
         return await _accessoriesService.AddSellerAsync(_mapper.Map<Seller>(payload), payload.Type);

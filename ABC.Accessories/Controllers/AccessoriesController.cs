@@ -38,15 +38,22 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
 
         return GetStatusCode(response, ResponseCode.SUCCESS_CREATED);
 
-    } 
+    }
 
-     [HttpPost("filter")]
-    public async Task<IActionResult> GetFilteredAccessoriesAsync(FilterAccessoriesDTO payload)
+    [HttpPost("filter")]
+    public async Task<IActionResult> GetFilteredAccessories(FilterAccessoriesDTO payload)
     {
         var response = await _accessoriesFacade.FilterAccessoriesAsync(payload);
 
         return GetStatusCode(response, ResponseCode.SUCCESS);
 
+    }
+
+    [HttpPost("details/:accessoryId")]
+    public async Task<IActionResult> GetAccessoryDetailsById(string accessoryId, BasePayloadDTO payload)
+    {
+        var response = await _accessoriesFacade.GetAccessoryDetailsByIdAsync(accessoryId, payload);
+        return GetStatusCode(response, ResponseCode.SUCCESS);
     }
 
     [HttpPost("images")]
@@ -64,7 +71,6 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
     }
 
     [HttpGet("sellers")]
-
     public async Task<IActionResult> GetSellers(string type)
     {
         var response = await _accessoriesFacade.GetSellersAsync(type);
@@ -72,7 +78,6 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
     }
 
     [HttpPost("categories")]
-
     public async Task<IActionResult> AddCategory([FromForm] AddCategoryDTO payload)
     {
         var response = await _accessoriesFacade.AddCategoryAsync(payload);
@@ -81,7 +86,6 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
     }
 
     [HttpGet("categories")]
-
     public async Task<IActionResult> GetCategories(string type)
     {
         var response = await _accessoriesFacade.GetCategoriesAsync(type);
@@ -90,7 +94,6 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
     }
 
     [HttpPost("brands")]
-
     public async Task<IActionResult> AddBrand([FromForm] AddBrandDTO payload)
     {
         var response = await _accessoriesFacade.AddBrandAsync(payload);
@@ -99,7 +102,6 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
     }
 
     [HttpGet("brands")]
-
     public async Task<IActionResult> GetBrands(string type)
     {
         var response = await _accessoriesFacade.GetBrandsAsync(type);
@@ -108,7 +110,6 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
     }
 
     [HttpPost("device-models")]
-
     public async Task<IActionResult> AddDeviceModel([FromForm] AddDeviceModelDTO payload)
     {
         var response = await _accessoriesFacade.AddDeviceModelAsync(payload);
@@ -117,7 +118,6 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
     }
 
     [HttpGet("device-models")]
-
     public async Task<IActionResult> GetDeviceModels(string type)
     {
         var response = await _accessoriesFacade.GetDeviceModelsAsync(type);

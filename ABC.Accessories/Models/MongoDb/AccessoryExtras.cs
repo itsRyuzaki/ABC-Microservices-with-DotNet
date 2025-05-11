@@ -9,6 +9,8 @@ public class AccessoryExtras
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
 
+    public required string AccessoryBaseId {get; set;}
+
     public required string AccessoryGuid {get; set;}
 
     public string[] Specifications { get; set; } = [];

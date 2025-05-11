@@ -10,8 +10,8 @@ public class FilterAccessoriesDTO
 
     public string[] SearchTerm { get; set; } = [];
 
-    public int[] CategoryId { get; set; } = [];
-    public int[] DeviceModelId { get; set; } = [];
-    public int[] BrandId { get; set; } = [];
+    public int[] CategoryIds { get; set; } = [];
+    public int[] DeviceModelIds { get; set; } = [];
+    public int[] BrandIds { get; set; } = [];
 
 }

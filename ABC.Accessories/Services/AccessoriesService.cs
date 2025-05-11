@@ -8,6 +8,7 @@ using ABC.Accessories.Services.MongoDb;
 using ABC.Accessories.Models.MongoDb;
 using MongoDB.Driver;
 using ABC.Accessories.DTO.Request;
+using ABC.Accessories.CustomException;
 
 namespace ABC.Accessories.Services;
 public class AccessoriesService : IAccessoriesService
@@ -510,26 +511,145 @@ public class AccessoriesService : IAccessoriesService
 
     public async Task<ApiResponseDto<List<CombinedAccessoryDetail>>> FilterAccessoriesAsync(FilterAccessoriesDTO requestPayload)
     {
-        var list = await _contextMap[requestPayload.Type].Accessories
-                            .Where(accessory =>
-                                    requestPayload.SearchTerm.Any(
-                                        value =>
-                                            accessory.AccessoryBase.Name.Contains(value)
-                                            || accessory.Description.Contains(value)
-                                    )
-                                    && requestPayload.BrandId.Any(id => id == accessory.AccessoryBase.BrandId)
-                                    && requestPayload.CategoryId.Any(id => id == accessory.AccessoryBase.CategoryId)
-                                    && requestPayload.DeviceModelId.Any(id => id == accessory.AccessoryBase.DeviceModelId)
-                                ).Select(accessory => new CombinedAccessoryDetail()
-                                {
-                                    AccessoryGuid = accessory.AccessoryGuid,
-                                    Name = accessory.AccessoryBase.Name,
-                                    Description = accessory.Description,
-                                    AbcPrice = accessory.AbcPrice,
+        try
+        {
+            _logger.LogInformation("Fetching list of accessories based on filter for type: {type}", requestPayload.Type);
 
-                                }).ToListAsync();
+            var list = await _contextMap[requestPayload.Type].Accessories
+                                .Where(accessory =>
+                                        requestPayload.SearchTerm.Any(
+                                            value =>
+                                                accessory.AccessoryBase.Name.Contains(value)
+                                                || accessory.Description.Contains(value)
+                                        )
+                                        && (requestPayload.BrandIds.Count() == 0
+                                            || requestPayload.BrandIds.Any(id => id == accessory.AccessoryBase.BrandId))
+                                        && (requestPayload.CategoryIds.Count() == 0
+                                            || requestPayload.CategoryIds.Any(id => id == accessory.AccessoryBase.CategoryId))
+                                        && (requestPayload.DeviceModelIds.Count() == 0
+                                            || requestPayload.DeviceModelIds.Any(id => id == accessory.AccessoryBase.DeviceModelId))
+                                    ).Select(accessory => new CombinedAccessoryDetail()
+                                    {
+                                        AccessoryGuid = accessory.AccessoryGuid,
+                                        Name = accessory.AccessoryBase.Name,
+                                        Description = accessory.Description,
+                                        AbcPrice = accessory.AbcPrice,
+                                        AvailableCount = accessory.Inventory.AvailableCount,
+                                        ImageDetails = accessory.Images.Select(image => (BaseImageDetail)image).ToList()
+                                    }).ToListAsync();
 
-        return ApiResponseDto<List<CombinedAccessoryDetail>>.HandleSuccessResponse(list);
+            return ApiResponseDto<List<CombinedAccessoryDetail>>.HandleSuccessResponse(list);
+
+        }
+        catch (Exception error)
+        {
+            _logger.LogError(
+                "Error while fetching list of accessories based on filter for type: {type}. See error stack below: \n {error}",
+                requestPayload.Type,
+                error.ToString()
+            );
+            return ApiResponseDto<List<CombinedAccessoryDetail>>.HandleErrorResponse(
+                                                            (int)ResponseCode.ERROR,
+                                                            ["Error while fetching list of accessories"]
+                                                        );
+        }
     }
+
+    public async Task<ApiResponseDto<CombinedAccessoryDetail>> GetAccessoryDetailsByIdAsync(string accessoryId, string type)
+    {
+        using var cts = new CancellationTokenSource();
+        try
+        {
+            _logger.LogInformation("Fetching accessory details for Id: {id}", accessoryId);
+
+            var accessoryDataTask = _contextMap[type].Accessories
+                                        .Where(accessory => accessory.AccessoryGuid == accessoryId)
+                                        .Select(accessory => new CombinedAccessoryDetail()
+                                        {
+                                            AccessoryGuid = accessory.AccessoryGuid,
+                                            Name = accessory.AccessoryBase.Name,
+                                            Description = accessory.Description,
+                                            AbcPrice = accessory.AbcPrice,
+                                            AvailableCount = accessory.Inventory.AvailableCount,
+                                            DeviceModelId = accessory.AccessoryBase.DeviceModelId,
+                                            BrandId = accessory.AccessoryBase.BrandId,
+                                            CategoryId = accessory.AccessoryBase.CategoryId,
+                                            Sellers = accessory.Sellers
+                                                        .Select(seller =>
+                                                            new KeyValuePair<int, string>(
+                                                                seller.Id,
+                                                                seller.Name
+                                                            ))
+                                                        .ToList(),
+                                            ImageDetails = accessory.Images
+                                                                    .Select(image => (BaseImageDetail)image)
+                                                                    .ToList()
+                                        }).FirstOrDefaultAsync(cts.Token);
+
+
+
+            var accessoryExtras = await _accExtrasCollectionMap[type]
+                                        .Find(accessory => accessory.AccessoryGuid == accessoryId)
+                                        .FirstOrDefaultAsync();
+
+            if (accessoryExtras == null)
+            {
+                cts.Cancel();
+                _logger.LogError("No Accessory extras found for id: {id}", accessoryId);
+                throw new ApiException(ResponseCode.NOT_FOUND, "No Accessory details found for given Id.");
+            }
+
+
+            var baseExtras = await _baseExtrasCollectionMap[type]
+                                    .Find(baseExtra => baseExtra.AccessoryBaseId == accessoryExtras.AccessoryBaseId)
+                                    .FirstOrDefaultAsync(cts.Token);
+
+
+            if (baseExtras == null)
+            {
+                cts.Cancel();
+                _logger.LogError("No Accessory base extras found for baseId: {id}", accessoryExtras.AccessoryBaseId);
+                throw new ApiException(ResponseCode.NOT_FOUND, "No Accessory details found for given Id.");
+            }
+
+            var accessoryData = await accessoryDataTask;
+
+            if (accessoryData == null)
+            {
+                _logger.LogError("No Accessory details found for baseId: {id}", accessoryId);
+                throw new ApiException(ResponseCode.NOT_FOUND, "No Accessory details found for given Id.");
+            }
+
+            accessoryData.InBoxItems = accessoryExtras.InBoxItems;
+            accessoryData.Specifications = accessoryExtras.Specifications;
+            accessoryData.ItemAttributes = accessoryExtras.ItemAttributes;
+            accessoryData.MasterAttributes = baseExtras.MasterAttributes;
+
+            return ApiResponseDto<CombinedAccessoryDetail>.HandleSuccessResponse(accessoryData);
+
+        }
+        catch (ApiException error)
+        {
+            cts.Cancel();
+            return ApiResponseDto<CombinedAccessoryDetail>.HandleErrorResponse(
+                                                            (int)error.ErrorCode,
+                                                            [error.Message]
+                                                        );
+        }
+        catch (Exception error)
+        {
+            cts.Cancel();
+            _logger.LogError(
+                "Error while getting accessorydetails for id: {id}. See error stack below: \n {error}",
+                accessoryId,
+                error.ToString()
+            );
+            return ApiResponseDto<CombinedAccessoryDetail>.HandleErrorResponse(
+                                                            (int)ResponseCode.ERROR,
+                                                            ["Error while fetching accessory details"]
+                                                        );
+        }
+    }
+
 
 }

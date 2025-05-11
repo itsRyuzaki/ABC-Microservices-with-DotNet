@@ -42,5 +42,7 @@ public interface IAccessoriesService
 
     public Task<ApiResponseDto<List<DeviceModel>?>> GetDeviceModelsAsync(string type);
     public Task<ApiResponseDto<List<CombinedAccessoryDetail>>> FilterAccessoriesAsync(FilterAccessoriesDTO requestPayload);
+    public Task<ApiResponseDto<CombinedAccessoryDetail>> GetAccessoryDetailsByIdAsync(string accessoryId, string type);
+
 
 }

@@ -12,6 +12,8 @@ public interface IAccessoriesFacade
 
     public Task<ApiResponseDto<string>> AddAccessoryBaseDetailAsync(AddAccessoryBaseDTO payload);
 
+    public Task<ApiResponseDto<CombinedAccessoryDetail>> GetAccessoryDetailsByIdAsync(string accessoryId, BasePayloadDTO payload);
+
     public Task<ApiResponseDto<int>> AddSellerDetailsAsync(AddSellerDTO payload);
 
     public Task<ApiResponseDto<List<Seller>?>> GetSellersAsync(string type);
