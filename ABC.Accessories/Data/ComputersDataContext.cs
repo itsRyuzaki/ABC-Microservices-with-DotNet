@@ -19,7 +19,8 @@ public class ComputersDataContext(
     {
         options.UseNpgsql(
                     config.GetConnectionString("ABC_Computers_DB"),
-                    x => x.MigrationsHistoryTable("__EFMigrationsHistory", schemaName)
+                    builderOptions => SetBaseDBProps(builderOptions, schemaName)
+
                 );
     }
 }

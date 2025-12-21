@@ -6,12 +6,22 @@ using ABC.Accessories.Models.MongoDb;
 using ABC.Accessories.Services;
 using ABC.Accessories.Services.Blob;
 using ABC.Accessories.Services.MongoDb;
+using Microsoft.AspNetCore.Http.Timeouts;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
+builder.Services.AddRequestTimeouts(options =>
+{
+    // Global default policy for all endpoints
+    options.DefaultPolicy = new RequestTimeoutPolicy
+    {
+        Timeout = TimeSpan.FromSeconds(10),
+        TimeoutStatusCode = 504 // Gateway Timeout (default)
+    };
+});
 
 // Add Cors
 string origin = builder.Configuration.GetSection("AppSettings")
@@ -34,7 +44,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // for db
-
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("ABC-Accessory-MongoDb"));
 
 var mobileDbString = builder.Configuration.GetConnectionString("ABC_Mobiles_DB") ??
@@ -48,15 +57,12 @@ builder.Services.AddNpgsql<MobilesDataContext>(mobileDbString);
 builder.Services.AddNpgsql<ComputersDataContext>(pcDbString);
 
 // Services for DI
-
 builder.Services.AddAutoMapper(typeof(AccessoriesMapper));
-builder.Services.AddSingleton<IBlobService,BlobService>();
+builder.Services.AddSingleton<IBlobService, BlobService>();
 builder.Services.AddSingleton<IMongoDbService, MongoDbService>();
 builder.Services.AddSingleton<IAccessoriesHelper, AccessoriesHelper>();
 builder.Services.AddScoped<IAccessoriesService, AccessoriesService>();
 builder.Services.AddScoped<IAccessoriesFacade, AccessoriesFacade>();
-
-
 
 var app = builder.Build();
 
@@ -71,6 +77,7 @@ else
     app.UseHttpsRedirection();
 }
 
+app.UseRequestTimeouts();
 
 app.UseAuthorization();
 

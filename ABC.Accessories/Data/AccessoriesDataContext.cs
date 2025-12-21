@@ -1,5 +1,6 @@
 using ABC.Accessories.Models;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
 namespace ABC.Accessories.Data;
 public class AccessoriesDataContext(DbContextOptions options) : DbContext(options)
@@ -18,6 +19,17 @@ public class AccessoriesDataContext(DbContextOptions options) : DbContext(option
             .HasMany(e => e.Sellers)
             .WithMany(e => e.Accessories)
             .UsingEntity("AccessorySellerXREF");
+    }
+
+    protected void SetBaseDBProps(NpgsqlDbContextOptionsBuilder builderOptions, string schemaName)
+    {
+        builderOptions.MigrationsHistoryTable("__EFMigrationsHistory", schemaName);
+        builderOptions.CommandTimeout(60);
+        builderOptions.EnableRetryOnFailure(
+            maxRetryCount: 3,
+            maxRetryDelay: TimeSpan.FromSeconds(5),
+            errorCodesToAdd: null
+        );
     }
 
     public DbSet<AccessoryBase> AccessoryBase => Set<AccessoryBase>();

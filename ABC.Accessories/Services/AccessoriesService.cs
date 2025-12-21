@@ -11,6 +11,7 @@ using ABC.Accessories.DTO.Request;
 using ABC.Accessories.CustomException;
 
 namespace ABC.Accessories.Services;
+
 public class AccessoriesService : IAccessoriesService
 {
 
@@ -517,11 +518,12 @@ public class AccessoriesService : IAccessoriesService
 
             var list = await _contextMap[requestPayload.Type].Accessories
                                 .Where(accessory =>
-                                        requestPayload.SearchTerm.Any(
-                                            value =>
-                                                accessory.AccessoryBase.Name.Contains(value)
-                                                || accessory.Description.Contains(value)
-                                        )
+                                        (requestPayload.SearchTerm.Count() == 0 
+                                            || requestPayload.SearchTerm.Any(
+                                                value =>
+                                                    accessory.AccessoryBase.Name.Contains(value)
+                                                    || accessory.Description.Contains(value)
+                                        ))
                                         && (requestPayload.BrandIds.Count() == 0
                                             || requestPayload.BrandIds.Any(id => id == accessory.AccessoryBase.BrandId))
                                         && (requestPayload.CategoryIds.Count() == 0
