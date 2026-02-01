@@ -2,12 +2,14 @@ using ABC.Users.DTO.Request;
 using ABC.Users.DTO.Response;
 using ABC.Users.Enums;
 using ABC.Users.Facade;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABC.Users.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[ApiVersion("1.0")]
+[Route("api/[controller]")]
 public class UsersController(IUserFacade _userFacade) : ControllerBase
 {
 

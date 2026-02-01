@@ -484,6 +484,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
-__blobstorage__/AzuriteConfig
+__blobstorage__/
 __azurite_db_blob_extent__.json
 __azurite_db_blob__.json

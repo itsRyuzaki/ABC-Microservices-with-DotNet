@@ -2,12 +2,14 @@ using ABC.Accessories.DTO.Request;
 using ABC.Accessories.DTO.Response;
 using ABC.Accessories.Enums;
 using ABC.Accessories.Facade;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABC.Accessories.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[ApiVersion("1.0")]
+[Route("api/[controller]")]
 public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : ControllerBase
 {
     [HttpGet("Health", Name = "GetHealth")]
