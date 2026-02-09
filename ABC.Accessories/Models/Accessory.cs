@@ -21,10 +21,13 @@ public class Accessory
     public required string Description { get; set; }
 
     [Required]
-    public Decimal SellerPrice { get; set; }
+    public decimal SellerPrice { get; set; }
 
     [Required]
-    public Decimal AbcPrice { get; set; }
+    public decimal AbcPrice { get; set; }
+
+    [Required]
+    public decimal OriginalPrice { get; set; }
 
     public DateTime CreatedDate { get; set; }
 

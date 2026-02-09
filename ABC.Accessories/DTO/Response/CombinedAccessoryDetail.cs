@@ -14,7 +14,9 @@ public class CombinedAccessoryDetail
 
     public List<BaseImageDetail> ImageDetails { get; set; } = [];
 
-    public Decimal AbcPrice { get; set; }
+    public decimal OriginalPrice { get; set; }
+
+    public decimal DiscountedPrice { get; set; }
 
     public string[] Specifications { get; set; } = [];
 

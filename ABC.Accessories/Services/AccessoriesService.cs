@@ -535,7 +535,8 @@ public class AccessoriesService : IAccessoriesService
                                         AccessoryGuid = accessory.AccessoryGuid,
                                         Name = accessory.AccessoryBase.Name,
                                         Description = accessory.Description,
-                                        AbcPrice = accessory.AbcPrice,
+                                        DiscountedPrice = accessory.AbcPrice,
+                                        OriginalPrice = accessory.OriginalPrice,
                                         AvailableCount = accessory.Inventory.AvailableCount,
                                         ImageDetails = accessory.Images.Select(image => (BaseImageDetail)image).ToList()
                                     }).ToListAsync();
@@ -571,7 +572,8 @@ public class AccessoriesService : IAccessoriesService
                                             AccessoryGuid = accessory.AccessoryGuid,
                                             Name = accessory.AccessoryBase.Name,
                                             Description = accessory.Description,
-                                            AbcPrice = accessory.AbcPrice,
+                                            DiscountedPrice = accessory.AbcPrice,
+                                            OriginalPrice = accessory.OriginalPrice,
                                             AvailableCount = accessory.Inventory.AvailableCount,
                                             DeviceModelId = accessory.AccessoryBase.DeviceModelId,
                                             BrandId = accessory.AccessoryBase.BrandId,

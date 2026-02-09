@@ -48,6 +48,9 @@ namespace ABC.Accessories.Migrations.Mobiles
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<decimal>("OriginalPrice")
+                        .HasColumnType("numeric");
+
                     b.Property<decimal>("SellerPrice")
                         .HasColumnType("numeric");
 
