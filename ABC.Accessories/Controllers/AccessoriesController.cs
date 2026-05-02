@@ -51,8 +51,8 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
 
     }
 
-    [HttpPost("details/:accessoryId")]
-    public async Task<IActionResult> GetAccessoryDetailsById(string accessoryId, BasePayloadDTO payload)
+    [HttpPost("details/{accessoryId}")]
+    public async Task<IActionResult> GetAccessoryDetailsById([FromRoute] string accessoryId, BasePayloadDTO payload)
     {
         var response = await _accessoriesFacade.GetAccessoryDetailsByIdAsync(accessoryId, payload);
         return GetStatusCode(response, ResponseCode.SUCCESS);
