@@ -70,6 +70,9 @@ public class AccessoriesFacade(
         var details = _mapper.Map<AccessoryBase>(payload);
 
         details.AccessoryBaseId = Guid.NewGuid().ToString();
+        var dateTime = DateTime.UtcNow;
+        details.CreatedDate = dateTime;
+        details.UpdatedDate = dateTime;
 
         var baseSavedResponse = await _accessoriesService.AddAccessoryBaseAsync(details, payload.Type);
 

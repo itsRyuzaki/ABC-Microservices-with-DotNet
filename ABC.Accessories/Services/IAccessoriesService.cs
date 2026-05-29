@@ -12,6 +12,7 @@ public interface IAccessoriesService
     public Task<ApiResponseDto<string>> AddAccessoryExtrasAsync(AccessoryExtras accessoryExtras, string type);
 
     public Task<ApiResponseDto<int>> AddSellerAsync(Seller seller, string type);
+    
     public Task<ApiResponseDto<List<Seller>?>> GetSellersAsync(string type);
 
     public Task<ApiResponseDto<string>> AddAccessoryBaseAsync(AccessoryBase accessoryBase, string type);
@@ -41,8 +42,14 @@ public interface IAccessoriesService
     public Task<ApiResponseDto<bool>> DeleteDeviceModelByIdAsync(int categoryId, string type);
 
     public Task<ApiResponseDto<List<DeviceModel>?>> GetDeviceModelsAsync(string type);
+
     public Task<ApiResponseDto<List<CombinedAccessoryDetail>>> FilterAccessoriesAsync(FilterAccessoriesDTO requestPayload);
+    
     public Task<ApiResponseDto<CombinedAccessoryDetail>> GetAccessoryDetailsByIdAsync(string accessoryId, string type);
+
+    public Task<ApiResponseDto<bool>> DeleteAccessoryByIdAsync(string accessoryGuid, string type);
+
+    public Task<ApiResponseDto<bool>> DeleteAccessoryBaseByIdAsync(string AccessoryBaseId, string type);
 
 
 }

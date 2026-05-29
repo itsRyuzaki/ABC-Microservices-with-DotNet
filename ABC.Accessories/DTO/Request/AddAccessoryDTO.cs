@@ -20,10 +20,12 @@ public class AddAccessoryDTO : BasePayloadDTO
     public required string[] InBoxItems { get; set; }
 
     [Required]
-    public Decimal SellerPrice { get; set; }
+    public decimal SellerPrice { get; set; }
 
     [Required]
-    public Decimal AbcPrice { get; set; }
+    public decimal AbcPrice { get; set; }
+    [Required]
+    public decimal OriginalPrice { get; set; }
 
     [Required]
     public int AvailableCount { get; set; }

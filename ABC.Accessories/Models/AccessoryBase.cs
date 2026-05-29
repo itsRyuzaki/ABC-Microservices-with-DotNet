@@ -5,7 +5,7 @@ namespace ABC.Accessories.Models;
 public class AccessoryBase
 {
     public int Id { get; set; }
-    
+
     [Required]
     public required string Name { get; set; }
 
@@ -24,4 +24,10 @@ public class AccessoryBase
     [Required]
     public int BrandId { get; set; }
     public Brand Brand { get; set; } = null!;
+
+    public DateTime CreatedDate { get; set; }
+
+    public DateTime UpdatedDate { get; set; }
+
+    public bool IsDeleted { get; set; } = false;
 }

@@ -33,4 +33,6 @@ public class Accessory
 
     public DateTime UpdatedDate { get; set; }
 
+    public bool IsDeleted {get; set;} = false;
+
 }
