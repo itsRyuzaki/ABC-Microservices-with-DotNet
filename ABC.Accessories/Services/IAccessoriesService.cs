@@ -29,17 +29,17 @@ public interface IAccessoriesService
 
     public Task<ApiResponseDto<List<Category>?>> GetCategoriesAsync(string type);
 
-    public Task<ApiResponseDto<bool>> DeleteCategoryByIdAsync(int categoryId, string type);
+    public Task<ApiResponseDto> DeleteCategoryByIdAsync(int categoryId, string type);
 
     public Task<ApiResponseDto<int>> AddBrandAsync(Brand brand, string type);
 
-    public Task<ApiResponseDto<bool>> DeleteBrandByIdAsync(int categoryId, string type);
+    public Task<ApiResponseDto> DeleteBrandByIdAsync(int categoryId, string type);
 
     public Task<ApiResponseDto<List<Brand>?>> GetBrandsAsync(string type);
 
     public Task<ApiResponseDto<int>> AddDeviceModelAsync(DeviceModel deviceModel, string type);
 
-    public Task<ApiResponseDto<bool>> DeleteDeviceModelByIdAsync(int categoryId, string type);
+    public Task<ApiResponseDto> DeleteDeviceModelByIdAsync(int categoryId, string type);
 
     public Task<ApiResponseDto<List<DeviceModel>?>> GetDeviceModelsAsync(string type);
 
@@ -47,9 +47,9 @@ public interface IAccessoriesService
     
     public Task<ApiResponseDto<CombinedAccessoryDetail>> GetAccessoryDetailsByIdAsync(string accessoryId, string type);
 
-    public Task<ApiResponseDto<bool>> DeleteAccessoryByIdAsync(string accessoryGuid, string type);
+    public Task<ApiResponseDto> DeleteAccessoryByIdAsync(string accessoryGuid, string type);
 
-    public Task<ApiResponseDto<bool>> DeleteAccessoryBaseByIdAsync(string AccessoryBaseId, string type);
+    public Task<ApiResponseDto> DeleteAccessoryBaseByIdAsync(string accessoryBaseId, string type);
 
 
 }

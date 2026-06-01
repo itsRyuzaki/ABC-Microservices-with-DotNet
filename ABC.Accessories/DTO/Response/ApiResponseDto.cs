@@ -25,7 +25,7 @@ public class ApiResponseDto<T>
         };
     }
 
-    public static ApiResponseDto<T> HandleSuccessResponse(T? data)
+    public static ApiResponseDto<T> HandleSuccessResponse(T? data = default)
     {
         return new ApiResponseDto<T>()
         {

@@ -285,7 +285,7 @@ public class AccessoriesService : IAccessoriesService
     }
 
 
-    public async Task<ApiResponseDto<bool>> DeleteCategoryByIdAsync(int categoryId, string type)
+    public async Task<ApiResponseDto> DeleteCategoryByIdAsync(int categoryId, string type)
     {
         try
         {
@@ -297,11 +297,11 @@ public class AccessoriesService : IAccessoriesService
             if (deletedRows > 0)
             {
                 _logger.LogInformation("Removed details for Category: {categoryId}", categoryId);
-                return ApiResponseDto<bool>.HandleSuccessResponse(true);
+                return (ApiResponseDto)ApiResponseDto.HandleSuccessResponse();
             }
             else
             {
-                return ApiResponseDto<bool>.HandleErrorResponse(
+                return (ApiResponseDto)ApiResponseDto.HandleErrorResponse(
                                                 (int)ResponseCode.NOT_FOUND,
                                                 ["No Record found for given category"]
                                             );
@@ -316,7 +316,7 @@ public class AccessoriesService : IAccessoriesService
                         error.ToString()
                     );
 
-            return ApiResponseDto<bool>
+            return (ApiResponseDto)ApiResponseDto
                     .HandleErrorResponse((int)ResponseCode.ERROR, ["Error while deleting category details."]);
         }
     }
@@ -367,7 +367,7 @@ public class AccessoriesService : IAccessoriesService
         }
     }
 
-    public async Task<ApiResponseDto<bool>> DeleteBrandByIdAsync(int brandId, string type)
+    public async Task<ApiResponseDto> DeleteBrandByIdAsync(int brandId, string type)
     {
         try
         {
@@ -379,11 +379,11 @@ public class AccessoriesService : IAccessoriesService
             if (deletedRows > 0)
             {
                 _logger.LogInformation("Removed details for Brand: {brandId}", brandId);
-                return ApiResponseDto<bool>.HandleSuccessResponse(true);
+                return (ApiResponseDto)ApiResponseDto.HandleSuccessResponse();
             }
             else
             {
-                return ApiResponseDto<bool>.HandleErrorResponse(
+                return (ApiResponseDto)ApiResponseDto.HandleErrorResponse(
                                                 (int)ResponseCode.NOT_FOUND,
                                                 ["No Record found for given brand"]
                                             );
@@ -398,7 +398,7 @@ public class AccessoriesService : IAccessoriesService
                         error.ToString()
                     );
 
-            return ApiResponseDto<bool>
+            return (ApiResponseDto)ApiResponseDto
                     .HandleErrorResponse((int)ResponseCode.ERROR, ["Error while deleting brand details."]);
         }
     }
@@ -449,7 +449,7 @@ public class AccessoriesService : IAccessoriesService
         }
     }
 
-    public async Task<ApiResponseDto<bool>> DeleteDeviceModelByIdAsync(int deviceModelId, string type)
+    public async Task<ApiResponseDto> DeleteDeviceModelByIdAsync(int deviceModelId, string type)
     {
         try
         {
@@ -461,11 +461,11 @@ public class AccessoriesService : IAccessoriesService
             if (deletedRows > 0)
             {
                 _logger.LogInformation("Removed details for Device Model: {deviceModelId}", deviceModelId);
-                return ApiResponseDto<bool>.HandleSuccessResponse(true);
+                return (ApiResponseDto)ApiResponseDto.HandleSuccessResponse();
             }
             else
             {
-                return ApiResponseDto<bool>.HandleErrorResponse(
+                return (ApiResponseDto)ApiResponseDto.HandleErrorResponse(
                                                 (int)ResponseCode.NOT_FOUND,
                                                 ["No Record found for given device model"]
                                             );
@@ -480,8 +480,7 @@ public class AccessoriesService : IAccessoriesService
                         error.ToString()
                     );
 
-            return ApiResponseDto<bool>
-                    .HandleErrorResponse((int)ResponseCode.ERROR, ["Error while deleting device model details."]);
+            return (ApiResponseDto)ApiResponseDto.HandleErrorResponse((int)ResponseCode.ERROR, ["Error while deleting device model details."]);
         }
     }
 
@@ -656,7 +655,7 @@ public class AccessoriesService : IAccessoriesService
         }
     }
 
-    public async Task<ApiResponseDto<bool>> DeleteAccessoryByIdAsync(string accessoryGuid, string type)
+    public async Task<ApiResponseDto> DeleteAccessoryByIdAsync(string accessoryGuid, string type)
     {
         try
         {
@@ -673,11 +672,11 @@ public class AccessoriesService : IAccessoriesService
             if (updatedRows > 0)
             {
                 _logger.LogInformation("Removed details for Accessory: {accessoryId}", accessoryGuid);
-                return ApiResponseDto<bool>.HandleSuccessResponse(true);
+                return (ApiResponseDto)ApiResponseDto.HandleSuccessResponse();
             }
             else
             {
-                return ApiResponseDto<bool>.HandleErrorResponse(
+                return (ApiResponseDto)ApiResponseDto.HandleErrorResponse(
                                                 (int)ResponseCode.NOT_FOUND,
                                                 ["No Record found for given accessory id"]
                                             );
@@ -692,19 +691,19 @@ public class AccessoriesService : IAccessoriesService
                         error.ToString()
                     );
 
-            return ApiResponseDto<bool>
+            return (ApiResponseDto)ApiResponseDto
                     .HandleErrorResponse((int)ResponseCode.ERROR, ["Error while deleting accessory details."]);
         }
     }
 
 
-    public async Task<ApiResponseDto<bool>> DeleteAccessoryBaseByIdAsync(string AccessoryBaseId, string type)
+    public async Task<ApiResponseDto> DeleteAccessoryBaseByIdAsync(string accessoryBaseId, string type)
     {
         using var transaction = await _contextMap[type].Database.BeginTransactionAsync();
         try
         {
             int updatedRows = await _contextMap[type].AccessoryBase
-                                        .Where(accessory => accessory.AccessoryBaseId == AccessoryBaseId)
+                                        .Where(accessory => accessory.AccessoryBaseId == accessoryBaseId)
                                         .ExecuteUpdateAsync(x => x
                                             .SetProperty(p => p.IsDeleted, p => true)
                                             .SetProperty(p => p.UpdatedDate, p => DateTime.UtcNow)
@@ -715,25 +714,25 @@ public class AccessoriesService : IAccessoriesService
 
             if (updatedRows > 0)
             {
-                _logger.LogInformation("Removed details for AccessoryBase: {accessoryId}", AccessoryBaseId);
+                _logger.LogInformation("Removed details for AccessoryBase: {accessoryId}", accessoryBaseId);
 
                 await _contextMap[type].Accessories
-                                        .Where(accessory => accessory.AccessoryBase.AccessoryBaseId == AccessoryBaseId)
+                                        .Where(accessory => accessory.AccessoryBase.AccessoryBaseId == accessoryBaseId)
                                         .ExecuteUpdateAsync(x => x
                                             .SetProperty(p => p.IsDeleted, p => true)
                                             .SetProperty(p => p.UpdatedDate, p => DateTime.UtcNow)
                                         );
 
-                _logger.LogInformation("Removed details for all accessories attached with AccessoryBase: {accessoryId}", AccessoryBaseId);
+                _logger.LogInformation("Removed details for all accessories attached with AccessoryBase: {accessoryId}", accessoryBaseId);
 
                 await transaction.CommitAsync();
 
-                return ApiResponseDto<bool>.HandleSuccessResponse(true);
+                return (ApiResponseDto)ApiResponseDto.HandleSuccessResponse();
             }
             else
             {
                 await transaction.RollbackAsync();
-                return ApiResponseDto<bool>.HandleErrorResponse(
+                return (ApiResponseDto)ApiResponseDto.HandleErrorResponse(
                                                 (int)ResponseCode.NOT_FOUND,
                                                 ["No Record found for given accessory base id"]
                                             );
@@ -744,13 +743,13 @@ public class AccessoriesService : IAccessoriesService
         {
             _logger.LogError(
                         "Error while deleting details for AccessoryBase: {accessoryId}. See error stack below: \n {error}",
-                        AccessoryBaseId,
+                        accessoryBaseId,
                         error.ToString()
                     );
 
             await transaction.RollbackAsync();
 
-            return ApiResponseDto<bool>
+            return (ApiResponseDto)ApiResponseDto
                     .HandleErrorResponse((int)ResponseCode.ERROR, ["Error while deleting accessory base details."]);
         }
     }

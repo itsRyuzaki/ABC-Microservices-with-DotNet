@@ -33,6 +33,13 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
         return GetStatusCode(response, ResponseCode.SUCCESS_CREATED);
     }
 
+    [HttpDelete("accessory-base/{accessoryBaseId}")]
+    public async Task<IActionResult> DeleteAccessoryBaseDetails([FromRoute] string accessoryBaseId, [FromQuery]string type)
+    {
+        var response = await _accessoriesFacade.DeleteAccessoryBaseAsync(accessoryBaseId, type);
+        return GetStatusCode(response, ResponseCode.SUCCESS);
+    }
+
     [HttpPost("")]
     public async Task<IActionResult> AddAccessory(AddAccessoryDTO payload)
     {
@@ -55,6 +62,13 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
     public async Task<IActionResult> GetAccessoryDetailsById([FromRoute] string accessoryId, BasePayloadDTO payload)
     {
         var response = await _accessoriesFacade.GetAccessoryDetailsByIdAsync(accessoryId, payload);
+        return GetStatusCode(response, ResponseCode.SUCCESS);
+    }
+
+    [HttpDelete("{accessoryId}")]
+    public async Task<IActionResult> DeleteAccessoryDetails([FromRoute] string accessoryId, [FromQuery]string type)
+    {
+        var response = await _accessoriesFacade.DeleteAccessoryAsync(accessoryId, type);
         return GetStatusCode(response, ResponseCode.SUCCESS);
     }
 
@@ -125,6 +139,5 @@ public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : Cont
         var response = await _accessoriesFacade.GetDeviceModelsAsync(type);
         return GetStatusCode(response, ResponseCode.SUCCESS);
     }
-
 
 }

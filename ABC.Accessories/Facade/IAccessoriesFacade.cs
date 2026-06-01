@@ -31,4 +31,8 @@ public interface IAccessoriesFacade
 
     public Task<ApiResponseDto<List<DeviceModel>?>> GetDeviceModelsAsync(string type);
 
+    public Task<ApiResponseDto> DeleteAccessoryAsync(string accessoryGuid, string type);
+
+    public Task<ApiResponseDto> DeleteAccessoryBaseAsync(string accessoryBaseId, string type);
+
 }

@@ -301,8 +301,19 @@ public class AccessoriesFacade(
         return await _accessoriesService.GetDeviceModelsAsync(type);
     }
 
-    public Task<ApiResponseDto<List<CombinedAccessoryDetail>>> FilterAccessoriesAsync(FilterAccessoriesDTO requestPayload)
+    public async Task<ApiResponseDto<List<CombinedAccessoryDetail>>> FilterAccessoriesAsync(FilterAccessoriesDTO requestPayload)
     {
-        return _accessoriesService.FilterAccessoriesAsync(requestPayload);
+        return await _accessoriesService.FilterAccessoriesAsync(requestPayload);
+    }
+
+    public async Task<ApiResponseDto> DeleteAccessoryAsync(string accessoryGuid, string type)
+    {
+        return await _accessoriesService.DeleteAccessoryByIdAsync(accessoryGuid, type);
+    }
+
+    public async Task<ApiResponseDto> DeleteAccessoryBaseAsync(string accessoryBaseId, string type)
+    {
+        return await _accessoriesService.DeleteAccessoryBaseByIdAsync(accessoryBaseId, type);
+
     }
 }
