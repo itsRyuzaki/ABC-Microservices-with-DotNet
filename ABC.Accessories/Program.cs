@@ -75,7 +75,7 @@ builder.Services.AddNpgsql<MobilesDataContext>(mobileDbString);
 builder.Services.AddNpgsql<ComputersDataContext>(pcDbString);
 
 // Services for DI
-builder.Services.AddAutoMapper(typeof(AccessoriesMapper));
+builder.Services.AddAutoMapper(cfg => { }, typeof(AccessoriesMapper));
 builder.Services.AddSingleton<IBlobService, BlobService>();
 builder.Services.AddSingleton<IMongoDbService, MongoDbService>();
 builder.Services.AddSingleton<IAccessoriesHelper, AccessoriesHelper>();

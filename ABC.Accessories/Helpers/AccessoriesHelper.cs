@@ -1,6 +1,6 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using ABC.Accessories.DTO.Response;
+using ABC.Contracts.DTO.Response;
 using ABC.Accessories.Enums;
 
 namespace ABC.Accessories.Helpers;

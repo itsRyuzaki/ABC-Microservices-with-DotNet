@@ -1,7 +1,7 @@
 using ABC.Accessories.DTO.Request;
-using ABC.Accessories.DTO.Response;
 using ABC.Accessories.Enums;
 using ABC.Accessories.Facade;
+using ABC.Contracts.DTO.Response;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +12,7 @@ namespace ABC.Accessories.Controllers;
 [Route("api/[controller]")]
 public class AccessoriesController(IAccessoriesFacade _accessoriesFacade) : ControllerBase
 {
-    [HttpGet("Health", Name = "GetHealth")]
+    [HttpGet("Health", Name = "AccessoriesGetHealth")]
     public string GetHealthStatus()
     {
         return "Accessories microservice up and running!!";

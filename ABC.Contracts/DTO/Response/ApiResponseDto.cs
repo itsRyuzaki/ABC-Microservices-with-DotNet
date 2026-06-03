@@ -1,4 +1,4 @@
-namespace ABC.Accessories.DTO.Response;
+namespace ABC.Contracts.DTO.Response;
 
 
 public class ErrorDetails

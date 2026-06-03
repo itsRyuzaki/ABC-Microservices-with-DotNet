@@ -484,6 +484,11 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Azurite Blob
 __blobstorage__/
 __azurite_db_blob_extent__.json
 __azurite_db_blob__.json
+
+# Local Nuget Feed
+ABC.NugetFeed/

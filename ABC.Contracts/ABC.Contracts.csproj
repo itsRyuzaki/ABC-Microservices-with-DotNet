@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+      <!-- Sets a base version -->
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <!-- Generates a unique local suffix based on the exact minute you built it -->
+    <VersionSuffix>$([System.DateTime]::Now.ToString("yyyyMMdd-HHmm"))</VersionSuffix>
+  </PropertyGroup>
+
+  <!-- Automatically copies the package to your local feed on every build -->
+  <Target Name="CopyToLocalFeed" AfterTargets="Pack">
+    <Copy SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" 
+          DestinationFolder="./../ABC.NugetFeed" />
+  </Target>
+
+</Project>

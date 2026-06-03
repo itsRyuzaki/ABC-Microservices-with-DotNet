@@ -1,4 +1,4 @@
-using ABC.Accessories.DTO.Response;
+using ABC.Contracts.DTO.Response;
 
 namespace ABC.Accessories.Helpers;
 
